@@ -157,7 +157,8 @@ const storage= multer.diskStorage({
 const upload= multer({storage:storage})
 
 app.post('/uploadDoctorImage/:doctorId', upload.single('image'),async (req, res) => {
-  const doctor= await Doctor.findById({_id:req.params.doctorId})
+  try{
+    const doctor= await Doctor.findById({_id:req.params.doctorId})
   
   if (!req.file&&!doctor) {
     return res.status(400).send('No file uploaded.');
@@ -165,6 +166,9 @@ app.post('/uploadDoctorImage/:doctorId', upload.single('image'),async (req, res)
   doctor.imagePath = req.file.path
   await doctor.save();
   res.send('File uploaded successfully.');
+  }catch(err){
+    res.status(500).json({message: err.message});
+  }
 });
 
 

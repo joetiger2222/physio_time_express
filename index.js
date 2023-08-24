@@ -68,11 +68,11 @@ app.post("/addAppointments/:doctorId", async (req, res) => {
   }
 });
 
-app.get("/availbleAppointments/:doctorId", async (req, res) => {
+app.get("/availbleAppointments/:doctorId/:date", async (req, res) => {
   try {
     const appointments = await Appointment.find({
       doctorId: req.params.doctorId,
-      date: req.body.date,
+      date: req.params.date,
       isAvailable: true,
     });
     res.status(200).json(appointments);

@@ -121,13 +121,10 @@ app.get("/reservedAppointments/:doctorId", async (req, res) => {
   }
 });
 
-app.delete("/cancelAppointment/:doctorId", async (req, res) => {
+app.delete("/cancelAppointment/:appointmentId", async (req, res) => {
   try {
     const appointment = await Appointment.findOne({
-      doctorId: req.params.doctorId,
-      date: req.body.date,
-      isAvailable: false,
-      time: req.body.time,
+      _id: req.params.appointmentId
     });
     if(appointment){
       appointment.isAvailable=true;

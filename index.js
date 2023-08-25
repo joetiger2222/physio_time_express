@@ -51,16 +51,17 @@ app.post("/auth/login", async (req, res) => {
 app.post("/addAppointments/:doctorId", async (req, res) => {
   try {
     const date = await Appointment.findOne({ date: req.body.date });
-
+    const newDoctorDay=await new DoctorDays({date: req.body.date, doctorId: req.params.doctorId , start:req.body.start, end:req.body.end}).save()
     if (!date) {
       for (var i = req.body.start; i <= req.body.end; i++) {
         const appointment = await new Appointment({
           date: req.body.date,
           time: i,
           doctorId: req.params.doctorId,
+          dayId:newDoctorDay._id
         }).save();
       }
-      const newDoctorDay=await new DoctorDays({date: req.body.date, doctorId: req.params.doctorId , start:req.body.start, end:req.body.end}).save()
+      
       res.status(201).json({ message: "Success" });
     } else {
       res.status(400).json({ message: "This Date Already Has Times" });
@@ -170,8 +171,17 @@ app.post('/uploadDoctorImage/:doctorId', upload.single('image'),async (req, res)
   }
 });
 
-app.get('/doctorDays/:doctorId',(req,res)=>{
+app.get('/doctorDays/:doctorId',async(req,res)=>{
+  try{
+    const doctorDays=await DoctorDays.find({doctorId: req.params.doctorId})
+    res.status(200).json(doctorDays)
+  }catch(err){
+    res.status(500).json({message: err.message});
+  }
+})
 
+app.delete('/doctorDays/:doctorId',async(req,res)=>{
+  
 })
 
 

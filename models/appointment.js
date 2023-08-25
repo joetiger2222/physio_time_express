@@ -18,6 +18,10 @@ const appointmentSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  dayId:{
+    type:String,
+    required:true
+  },
   patientName:String,
   patientPhoneNumber:String,
   patientEmail:String,

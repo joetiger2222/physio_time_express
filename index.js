@@ -180,8 +180,14 @@ app.get('/doctorDays/:doctorId',async(req,res)=>{
   }
 })
 
-app.delete('/doctorDays/:doctorId',async(req,res)=>{
-  
+app.delete('/doctorDays/:dayId',async(req,res)=>{
+  try{
+    await DoctorDays.delete({_id:req.params.dayId})
+  await Appointment.delete({dayId:req.params.dayId})
+  res.status(200).json({message:'success'})
+  }catch(err){
+    res.status(500).json({message:'error'})
+  }
 })
 
 

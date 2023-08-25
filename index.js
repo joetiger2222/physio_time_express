@@ -180,15 +180,17 @@ app.get('/doctorDays/:doctorId',async(req,res)=>{
   }
 })
 
-app.delete('/doctorDays/:dayId',async(req,res)=>{
-  try{
-    await DoctorDays.delete({_id:req.params.dayId})
-  await Appointment.delete({dayId:req.params.dayId})
-  res.status(200).json({message:'success'})
-  }catch(err){
-    res.status(500).json({message:'error'})
+
+app.delete('/doctorDays/:dayId', async (req, res) => {
+  try {
+    await DoctorDays.deleteOne({ _id: req.params.dayId }); // Use deleteOne() for deleting a single document
+    await Appointment.deleteMany({ dayId: req.params.dayId }); // Use deleteMany() for deleting multiple documents
+    res.status(200).json({ message: 'success' });
+  } catch (err) {
+    res.status(500).json({ message: 'error' });
   }
-})
+});
+
 
 
 app.listen(3001, () => {

@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 const Doctor = require("./models/doctor");
 const Appointment = require("./models/appointment");
+const DoctorDays= require("./models/doctorDays")
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 
@@ -59,6 +60,7 @@ app.post("/addAppointments/:doctorId", async (req, res) => {
           doctorId: req.params.doctorId,
         }).save();
       }
+      const newDoctorDay=await new DoctorDays({date: req.body.date, doctorId: req.params.doctorId , start:req.body.start, end:req.body.end}).save()
       res.status(201).json({ message: "Success" });
     } else {
       res.status(400).json({ message: "This Date Already Has Times" });
@@ -167,6 +169,10 @@ app.post('/uploadDoctorImage/:doctorId', upload.single('image'),async (req, res)
     res.status(500).json({message: err.message});
   }
 });
+
+app.get('/doctorDays/:doctorId',(req,res)=>{
+
+})
 
 
 app.listen(3001, () => {
